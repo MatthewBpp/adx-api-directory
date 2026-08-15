@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function AddApi() {
+function AddApi({ adminMode }) {
 
   const navigate = useNavigate();
 
@@ -153,21 +153,23 @@ function AddApi() {
 
         <br /><br />
 
-        {/* ADD BUTTON */}
-        <button
-          type="submit"
-          style={{
-            backgroundColor: '#2563EB',
-            color: 'white',
-            padding: '10px 18px',
-            borderRadius: '4px',
-            border: 'none',
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
-        >
-          Add API
-        </button>
+        {/* CONDITIONAL ADD BUTTON */}
+        {adminMode && (
+          <button
+            type="submit"
+            style={{
+              backgroundColor: '#2563EB',
+              color: 'white',
+              padding: '10px 18px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            Add API
+          </button>
+        )}
 
       </form>
     </div>

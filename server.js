@@ -104,7 +104,23 @@ app.post('/apis', (req, res) => {
     res.json({ message: "API added successfully", api: newApi });
 });
 
+/**
+ * DELETE /apis/:id
+ * Deletes an API object.
+ * This powers the Delete API button.
+ */
+app.delete('/apis/:id', (req, res) => {
+    const apiId = parseInt(req.params.id);
+    const index = apis.findIndex(a => a.id === apiId);
 
+    if (index === -1) {
+        return res.status(404).json({ error: "API not found" });
+    }
+
+    apis.splice(index, 1);
+
+    res.json({ message: "API deleted successfully" });
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
