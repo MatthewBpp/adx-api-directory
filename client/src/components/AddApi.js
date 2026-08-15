@@ -3,14 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 function AddApi() {
 
-  // -------------------------------------------------------------
-  // Navigation hook: used to redirect after saving
-  // -------------------------------------------------------------
   const navigate = useNavigate();
 
-  // -------------------------------------------------------------
-  // State: stores the new API fields before submission
-  // -------------------------------------------------------------
   const [api, setApi] = useState({
     name: "",
     domain: "Payments",
@@ -20,9 +14,6 @@ function AddApi() {
     description: ""
   });
 
-  // -------------------------------------------------------------
-  // Handle form submission: send new API to backend
-  // -------------------------------------------------------------
   const handleSave = (e) => {
     e.preventDefault();
 
@@ -32,39 +23,46 @@ function AddApi() {
       body: JSON.stringify(api)
     })
       .then(res => res.json())
-      .then(() => {
-        // Redirect back to the Home screen
-        navigate("/");
-      });
+      .then(() => navigate("/"));
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Add New API</h1>
+    <div style={{ padding: '20px', color: '#1A1F2B' }}>
+      <h1 style={{ color: '#1A1F2B' }}>Add New API</h1>
 
-      {/* ---------------------------------------------------------
-          ADD API FORM
-          Each field updates the API object stored in state.
-         --------------------------------------------------------- */}
       <form onSubmit={handleSave}>
 
-        <label>
+        {/* NAME */}
+        <label style={{ color: '#2E3445' }}>
           Name:
           <input
             type="text"
             value={api.name}
             onChange={(e) => setApi({ ...api, name: e.target.value })}
             required
+            style={{
+              padding: '8px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginLeft: '10px'
+            }}
           />
         </label>
 
         <br /><br />
 
-        <label>
+        {/* DOMAIN */}
+        <label style={{ color: '#2E3445' }}>
           Domain:
           <select
             value={api.domain}
             onChange={(e) => setApi({ ...api, domain: e.target.value })}
+            style={{
+              marginLeft: '10px',
+              padding: '6px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
           >
             <option>Payments</option>
             <option>Customer</option>
@@ -75,11 +73,18 @@ function AddApi() {
 
         <br /><br />
 
-        <label>
+        {/* METHOD */}
+        <label style={{ color: '#2E3445' }}>
           Method:
           <select
             value={api.method}
             onChange={(e) => setApi({ ...api, method: e.target.value })}
+            style={{
+              marginLeft: '10px',
+              padding: '6px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
           >
             <option>GET</option>
             <option>POST</option>
@@ -90,11 +95,18 @@ function AddApi() {
 
         <br /><br />
 
-        <label>
+        {/* STATUS */}
+        <label style={{ color: '#2E3445' }}>
           Status:
           <select
             value={api.status}
             onChange={(e) => setApi({ ...api, status: e.target.value })}
+            style={{
+              marginLeft: '10px',
+              padding: '6px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
           >
             <option>Up-to-date</option>
             <option>Needs Review</option>
@@ -103,29 +115,60 @@ function AddApi() {
 
         <br /><br />
 
-        <label>
+        {/* OWNER */}
+        <label style={{ color: '#2E3445' }}>
           Owner:
           <input
             type="text"
             value={api.owner}
             onChange={(e) => setApi({ ...api, owner: e.target.value })}
             required
+            style={{
+              padding: '8px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginLeft: '10px'
+            }}
           />
         </label>
 
         <br /><br />
 
-        <label>
+        {/* DESCRIPTION */}
+        <label style={{ color: '#2E3445' }}>
           Description:
           <textarea
             value={api.description}
             onChange={(e) => setApi({ ...api, description: e.target.value })}
+            style={{
+              padding: '8px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginLeft: '10px',
+              width: '300px',
+              height: '120px'
+            }}
           />
         </label>
 
         <br /><br />
 
-        <button type="submit">Add API</button>
+        {/* ADD BUTTON */}
+        <button
+          type="submit"
+          style={{
+            backgroundColor: '#2563EB',
+            color: 'white',
+            padding: '10px 18px',
+            borderRadius: '4px',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          Add API
+        </button>
+
       </form>
     </div>
   );

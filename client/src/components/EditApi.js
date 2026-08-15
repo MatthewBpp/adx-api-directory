@@ -3,41 +3,21 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 function EditApi() {
 
-  // -------------------------------------------------------------
-  // Extract API ID from the URL (e.g., /api/3/edit → id = 3)
-  // -------------------------------------------------------------
   const { id } = useParams();
-
-  // -------------------------------------------------------------
-  // Navigation hook: used to redirect after saving
-  // -------------------------------------------------------------
   const navigate = useNavigate();
 
-  // -------------------------------------------------------------
-  // State: stores the editable API fields
-  // -------------------------------------------------------------
   const [api, setApi] = useState(null);
 
-  // -------------------------------------------------------------
-  // Fetch the API details when the page loads
-  // Pre-fills the form with existing values
-  // -------------------------------------------------------------
   useEffect(() => {
     fetch(`/apis/${id}`)
       .then(res => res.json())
       .then(data => setApi(data));
   }, [id]);
 
-  // -------------------------------------------------------------
-  // If API hasn't loaded yet, show a loading message
-  // -------------------------------------------------------------
   if (!api) {
-    return <p>Loading API...</p>;
+    return <p style={{ color: '#1A1F2B' }}>Loading API...</p>;
   }
 
-  // -------------------------------------------------------------
-  // Handle form submission: send updated API to backend
-  // -------------------------------------------------------------
   const handleSave = (e) => {
     e.preventDefault();
 
@@ -47,39 +27,45 @@ function EditApi() {
       body: JSON.stringify(api)
     })
       .then(res => res.json())
-      .then(() => {
-        // Redirect back to the API Details page
-        navigate(`/api/${id}`);
-      });
+      .then(() => navigate(`/api/${id}`));
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Edit API: {api.name}</h1>
+    <div style={{ padding: '20px', color: '#1A1F2B' }}>
+      <h1 style={{ color: '#1A1F2B' }}>Edit API: {api.name}</h1>
 
-      {/* ---------------------------------------------------------
-          EDIT FORM
-          Each field is bound to the API state object.
-          Updating inputs updates the API object in real time.
-         --------------------------------------------------------- */}
       <form onSubmit={handleSave}>
 
-        <label>
+        {/* NAME */}
+        <label style={{ color: '#2E3445' }}>
           Name:
           <input
             type="text"
             value={api.name}
             onChange={(e) => setApi({ ...api, name: e.target.value })}
+            style={{
+              padding: '8px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginLeft: '10px'
+            }}
           />
         </label>
 
         <br /><br />
 
-        <label>
+        {/* DOMAIN */}
+        <label style={{ color: '#2E3445' }}>
           Domain:
           <select
             value={api.domain}
             onChange={(e) => setApi({ ...api, domain: e.target.value })}
+            style={{
+              marginLeft: '10px',
+              padding: '6px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
           >
             <option>Payments</option>
             <option>Customer</option>
@@ -90,11 +76,18 @@ function EditApi() {
 
         <br /><br />
 
-        <label>
+        {/* METHOD */}
+        <label style={{ color: '#2E3445' }}>
           Method:
           <select
             value={api.method}
             onChange={(e) => setApi({ ...api, method: e.target.value })}
+            style={{
+              marginLeft: '10px',
+              padding: '6px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
           >
             <option>GET</option>
             <option>POST</option>
@@ -105,11 +98,18 @@ function EditApi() {
 
         <br /><br />
 
-        <label>
+        {/* STATUS */}
+        <label style={{ color: '#2E3445' }}>
           Status:
           <select
             value={api.status}
             onChange={(e) => setApi({ ...api, status: e.target.value })}
+            style={{
+              marginLeft: '10px',
+              padding: '6px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
           >
             <option>Up-to-date</option>
             <option>Needs Review</option>
@@ -118,28 +118,59 @@ function EditApi() {
 
         <br /><br />
 
-        <label>
+        {/* OWNER */}
+        <label style={{ color: '#2E3445' }}>
           Owner:
           <input
             type="text"
             value={api.owner}
             onChange={(e) => setApi({ ...api, owner: e.target.value })}
+            style={{
+              padding: '8px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginLeft: '10px'
+            }}
           />
         </label>
 
         <br /><br />
 
-        <label>
+        {/* DESCRIPTION */}
+        <label style={{ color: '#2E3445' }}>
           Description:
           <textarea
             value={api.description || ""}
             onChange={(e) => setApi({ ...api, description: e.target.value })}
+            style={{
+              padding: '8px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginLeft: '10px',
+              width: '300px',
+              height: '120px'
+            }}
           />
         </label>
 
         <br /><br />
 
-        <button type="submit">Save Changes</button>
+        {/* SAVE BUTTON */}
+        <button
+          type="submit"
+          style={{
+            backgroundColor: '#2563EB',
+            color: 'white',
+            padding: '10px 18px',
+            borderRadius: '4px',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          Save Changes
+        </button>
+
       </form>
     </div>
   );
