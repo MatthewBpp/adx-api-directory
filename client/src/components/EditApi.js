@@ -13,11 +13,12 @@ function EditApi({ adminMode }) {
       .then(res => res.json())
       .then(data => setApi({
         ...data,
-        requestParams: data.requestParams || "{}",
+
+        // Ensure these fields always load correctly
+        requestParams: Array.isArray(data.requestParams) ? data.requestParams : [],
         responseSchema: data.responseSchema || "{}",
         examplePayload: data.examplePayload || "{}",
-        authentication: data.authentication || "",
-        documentationFreshness: data.documentationFreshness || "Up-to-date"
+        authentication: data.authentication || ""
       }));
   }, [id]);
 
@@ -168,7 +169,7 @@ function EditApi({ adminMode }) {
 
         </div>
 
-        {/* LAST UPDATED + FRESHNESS */}
+        {/* LAST UPDATED */}
         <div style={{ marginTop: '20px' }}>
           <label style={{ fontWeight: 'bold', color: '#2E3445' }}>Last Updated</label>
           <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -203,10 +204,22 @@ function EditApi({ adminMode }) {
 
         {/* JSON SECTIONS */}
         <div style={{ marginTop: '30px' }}>
+
+          {/* REQUEST PARAMETERS */}
           <h3 style={{ color: '#1A1F2B' }}>Request Parameters</h3>
           <textarea
-            value={api.requestParams}
-            onChange={(e) => setApi({ ...api, requestParams: e.target.value })}
+            value={JSON.stringify(api.requestParams, null, 2)}
+            onChange={(e) => {
+              try {
+                const parsed = JSON.parse(e.target.value);
+                setApi({
+                  ...api,
+                  requestParams: Array.isArray(parsed) ? parsed : []
+                });
+              } catch {
+                console.log("Invalid JSON in request parameters");
+              }
+            }}
             style={{
               width: '100%',
               height: '120px',
@@ -216,6 +229,7 @@ function EditApi({ adminMode }) {
             }}
           />
 
+          {/* RESPONSE SCHEMA */}
           <h3 style={{ marginTop: '20px', color: '#1A1F2B' }}>Response Schema</h3>
           <textarea
             value={api.responseSchema}
@@ -229,6 +243,7 @@ function EditApi({ adminMode }) {
             }}
           />
 
+          {/* EXAMPLE PAYLOAD */}
           <h3 style={{ marginTop: '20px', color: '#1A1F2B' }}>Example Payload</h3>
           <textarea
             value={api.examplePayload}
@@ -241,6 +256,7 @@ function EditApi({ adminMode }) {
               borderRadius: '4px'
             }}
           />
+
         </div>
 
         {/* BUTTONS */}
