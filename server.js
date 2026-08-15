@@ -1,14 +1,7 @@
 /**
  * ADX Backend Core
- * This step introduces the first data layer for the API Directory (ADX).
- * API metadata is now stored in a JSON file (data/apis.json) and served
- * through the /apis endpoint to the React frontend.
- *
- * Why it's important:
- * - Establishes a single source of truth for API documentation.
- * - Enables future enhancements: search, filtering, freshness tracking.
- * - Keeps backend logic separate from data storage.
- * - Allows easy migration to a database later without changing the frontend.
+ * Serves API metadata to the React frontend.
+ * Supports search, filtering, and individual API lookup.
  */
 
 const express = require('express');
@@ -21,12 +14,97 @@ app.use(express.json());
 // Load API directory data from JSON file
 const apis = require('./data/apis.json');
 
-// Return all APIs to the frontend
+/**
+ * GET /apis
+ * Returns all APIs, with optional search + filtering.
+ * This powers the ADX Home screen.
+ */
 app.get('/apis', (req, res) => {
-    res.json(apis);
+    let results = apis;
+
+    const { search, domain, status, method } = req.query;
+
+    // SEARCH (name, domain, owner, status)
+    if (search) {
+        const term = search.toLowerCase();
+        results = results.filter(api =>
+            api.name.toLowerCase().includes(term) ||
+            api.domain.toLowerCase().includes(term) ||
+            api.owner.toLowerCase().includes(term) ||
+            api.status.toLowerCase().includes(term)
+        );
+    }
+
+    // FILTER: Domain
+    if (domain && domain !== "All") {
+        results = results.filter(api => api.domain === domain);
+    }
+
+    // FILTER: Status
+    if (status && status !== "All") {
+        results = results.filter(api => api.status === status);
+    }
+
+    // FILTER: Method
+    if (method && method !== "All") {
+        results = results.filter(api => api.method === method);
+    }
+
+    res.json(results);
 });
 
+/**
+ * GET /apis/:id
+ * Returns a single API object by ID.
+ * This powers the API Details page.
+ */
+app.get('/apis/:id', (req, res) => {
+    const apiId = parseInt(req.params.id);
+    const api = apis.find(a => a.id === apiId);
+
+    if (!api) {
+        return res.status(404).json({ error: "API not found" });
+    }
+
+    res.json(api);
+});
+
+/**
+ * PUT /apis/:id
+ * Updates an existing API object.
+ * This powers the Edit API page.
+ */
+app.put('/apis/:id', (req, res) => {
+    const apiId = parseInt(req.params.id);
+    const index = apis.findIndex(a => a.id === apiId);
+
+    if (index === -1) {
+        return res.status(404).json({ error: "API not found" });
+    }
+
+    // Replace the API object with the updated one
+    apis[index] = req.body;
+
+    res.json({ message: "API updated successfully", api: apis[index] });
+});
+
+/**
+ * POST /apis
+ * Adds a new API object.
+ * This powers the Add API page.
+ */
+app.post('/apis', (req, res) => {
+    const newApi = req.body;
+
+    // Assign a new ID (simple auto-increment)
+    newApi.id = apis.length + 1;
+
+    apis.push(newApi);
+
+    res.json({ message: "API added successfully", api: newApi });
+});
+
+
+
 const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => console.log('Server running on port ' + PORT));
-
