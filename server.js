@@ -7,12 +7,27 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const fs = require('fs');
 
 app.use(cors());
 app.use(express.json());
 
-// Load API directory data from JSON file
+// Load API directory data from JSON file (in-memory store)
 const apis = require('./data/apis.json');
+
+/**
+ * Utility: Write updated API array back to JSON file
+ */
+function saveApis() {
+    fs.writeFileSync('./data/apis.json', JSON.stringify(apis, null, 2));
+}
+
+/**
+ * Utility: Generate YYYY-MM-DD timestamp
+ */
+function getTimestamp() {
+    return new Date().toISOString().split("T")[0];
+}
 
 /**
  * GET /apis
@@ -56,7 +71,7 @@ app.get('/apis', (req, res) => {
 /**
  * GET /apis/:id
  * Returns a single API object by ID.
- * This powers the API Details page.
+ * Ensures requestParams is always an array.
  */
 app.get('/apis/:id', (req, res) => {
     const apiId = parseInt(req.params.id);
@@ -66,13 +81,17 @@ app.get('/apis/:id', (req, res) => {
         return res.status(404).json({ error: "API not found" });
     }
 
+    // Guarantee requestParams is always an array
+    api.requestParams = Array.isArray(api.requestParams) ? api.requestParams : [];
+
     res.json(api);
 });
 
 /**
  * PUT /apis/:id
  * Updates an existing API object.
- * This powers the Edit API page.
+ * Auto-updates lastUpdated timestamp.
+ * Preserves requestParams so ApiDetails never breaks.
  */
 app.put('/apis/:id', (req, res) => {
     const apiId = parseInt(req.params.id);
@@ -82,24 +101,45 @@ app.put('/apis/:id', (req, res) => {
         return res.status(404).json({ error: "API not found" });
     }
 
-    // Replace the API object with the updated one
-    apis[index] = req.body;
+    const updated = {
+        ...apis[index],          // keep existing fields
+        ...req.body,             // overwrite edited fields
+        requestParams: Array.isArray(apis[index].requestParams)
+            ? apis[index].requestParams
+            : [],                // ALWAYS preserve array
+        lastUpdated: getTimestamp()
+    };
 
-    res.json({ message: "API updated successfully", api: apis[index] });
+    apis[index] = updated;
+
+    saveApis();
+
+    res.json({ message: "API updated successfully", api: updated });
 });
 
 /**
  * POST /apis
  * Adds a new API object.
- * This powers the Add API page.
+ * Auto-assigns ID + auto-updates lastUpdated timestamp.
+ * Ensures requestParams is always an array.
  */
 app.post('/apis', (req, res) => {
     const newApi = req.body;
 
-    // Assign a new ID (simple auto-increment)
-    newApi.id = apis.length + 1;
+    // Assign a new ID (safe auto-increment)
+    newApi.id = apis.length > 0 ? Math.max(...apis.map(a => a.id)) + 1 : 1;
+
+    // Guarantee requestParams is always an array
+    newApi.requestParams = Array.isArray(newApi.requestParams)
+        ? newApi.requestParams
+        : [];
+
+    // AUTO TIMESTAMP
+    newApi.lastUpdated = getTimestamp();
 
     apis.push(newApi);
+
+    saveApis();
 
     res.json({ message: "API added successfully", api: newApi });
 });
@@ -118,6 +158,8 @@ app.delete('/apis/:id', (req, res) => {
     }
 
     apis.splice(index, 1);
+
+    saveApis();
 
     res.json({ message: "API deleted successfully" });
 });

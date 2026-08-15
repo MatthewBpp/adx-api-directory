@@ -6,7 +6,13 @@
     "method": "POST",
     "status": "Up-to-date",
     "owner": "Payments Team",
-    "lastUpdated": "2026-08-10"
+    "lastUpdated": "2026-08-15",
+    "requestParams": [],
+    "responseSchema": "{EFG}",
+    "examplePayload": "{This is a test}",
+    "authentication": "",
+    "documentationFreshness": "Up-to-date",
+    "description": "This is a test "
   },
   {
     "id": 2,
