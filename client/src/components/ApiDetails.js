@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-function ApiDetails() {
+function ApiDetails({ adminMode }) {
 
   const { id } = useParams();
   const [api, setApi] = useState(null);
@@ -20,7 +20,6 @@ function ApiDetails() {
     <div style={{ padding: '20px', color: '#1A1F2B' }}>
       <h1 style={{ color: '#1A1F2B' }}>{api.name}</h1>
 
-      {/* High-level API information */}
       <p><strong>Domain:</strong> {api.domain}</p>
       <p><strong>Method:</strong> {api.method}</p>
 
@@ -37,7 +36,6 @@ function ApiDetails() {
       <p><strong>Owner:</strong> {api.owner}</p>
       <p><strong>Last Updated:</strong> {api.lastUpdated}</p>
 
-      {/* Description */}
       {api.description && (
         <div style={{ marginTop: '20px' }}>
           <h3 style={{ color: '#2E3445' }}>Description</h3>
@@ -45,7 +43,6 @@ function ApiDetails() {
         </div>
       )}
 
-      {/* Schema */}
       {api.schema && (
         <div style={{
           marginTop: '20px',
@@ -59,7 +56,6 @@ function ApiDetails() {
         </div>
       )}
 
-      {/* Example */}
       {api.example && (
         <div style={{
           marginTop: '20px',
@@ -73,18 +69,41 @@ function ApiDetails() {
         </div>
       )}
 
-      {/* Edit API link */}
-      <div style={{ marginTop: '30px' }}>
-        <a 
-          href={`/api/${api.id}/edit`} 
-          style={{ 
-            fontWeight: 'bold',
-            color: '#2563EB'
-          }}
-        >
-          Edit API
-        </a>
-      </div>
+      {/* CONDITIONAL EDIT + DELETE */}
+      {adminMode && (
+        <div style={{ marginTop: '30px' }}>
+          <a 
+            href={`/api/${api.id}/edit`} 
+            style={{ 
+              fontWeight: 'bold',
+              color: '#2563EB',
+              marginRight: '12px'
+            }}
+          >
+            Edit API
+          </a>
+
+          <button
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this API?")) {
+                fetch(`/apis/${api.id}`, { method: "DELETE" })
+                  .then(() => window.location.href = "/");
+              }
+            }}
+            style={{
+              backgroundColor: '#EF4444',
+              color: 'white',
+              padding: '10px 18px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            Delete API
+          </button>
+        </div>
+      )}
     </div>
   );
 }

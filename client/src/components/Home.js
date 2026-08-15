@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-function Home() {
+function Home({ adminMode }) {
 
-  // -------------------------------------------------------------
-  // State: stores the API list and all filter/search inputs
-  // -------------------------------------------------------------
   const [apis, setApis] = useState([]);
   const [search, setSearch] = useState("");
   const [domain, setDomain] = useState("All");
   const [status, setStatus] = useState("All");
   const [method, setMethod] = useState("All");
 
-  // -------------------------------------------------------------
-  // useEffect: fetch filtered API list whenever filters change
-  // -------------------------------------------------------------
   useEffect(() => {
     const params = new URLSearchParams();
 
@@ -31,24 +25,18 @@ function Home() {
     <div style={{ padding: '20px', color: '#1A1F2B' }}>
       <h1 style={{ color: '#1A1F2B' }}>ADX — API Directory</h1>
 
-      {/* ---------------------------------------------------------
-          ADD API LINK (styled with WCAG-safe colours)
-         --------------------------------------------------------- */}
       <div style={{ marginBottom: '20px' }}>
         <a 
           href="/add" 
           style={{ 
             fontWeight: 'bold',
-            color: '#2563EB'   // Primary Blue
+            color: '#2563EB'
           }}
         >
           Add New API
         </a>
       </div>
 
-      {/* ---------------------------------------------------------
-          SEARCH BAR (WCAG-safe border + padding)
-         --------------------------------------------------------- */}
       <input
         type="text"
         placeholder="Search APIs..."
@@ -56,16 +44,13 @@ function Home() {
         onChange={(e) => setSearch(e.target.value)}
         style={{
           padding: '8px',
-          border: '1px solid #CBD5E1',   // Slate 300
+          border: '1px solid #CBD5E1',
           borderRadius: '4px',
           width: '250px',
           marginBottom: '10px'
         }}
       />
 
-      {/* ---------------------------------------------------------
-          FILTER DROPDOWNS (WCAG-safe borders + spacing)
-         --------------------------------------------------------- */}
       <div style={{ marginTop: '10px', marginBottom: '20px' }}>
         <label style={{ color: '#2E3445' }}>
           Domain:
@@ -126,36 +111,44 @@ function Home() {
         </label>
       </div>
 
-      {/* ---------------------------------------------------------
-          API LIST (WCAG-safe colours + semantic status colours)
-         --------------------------------------------------------- */}
       <ul>
         {apis.map(api => (
           <li key={api.id} style={{ marginBottom: '12px' }}>
             
-            {/* Link to API Details page */}
             <a 
               href={`/api/${api.id}`} 
               style={{ 
                 textDecoration: 'none',
-                color: '#2563EB',        // Primary Blue
+                color: '#2563EB',
                 fontWeight: 'bold'
               }}
             >
               {api.name}
             </a>
 
-            {/* High-level summary */}
             <div style={{ marginTop: '4px' }}>
               <span><strong>Domain:</strong> {api.domain}</span> &nbsp;|&nbsp;
               <span><strong>Method:</strong> {api.method}</span> &nbsp;|&nbsp;
 
-              {/* Semantic colour for status */}
               <span style={{ 
                 color: api.status === "Up-to-date" ? "#22C55E" : "#F59E0B"
               }}>
                 <strong>Status:</strong> {api.status}
               </span>
+
+              {/* Conditionally show Edit link */}
+              {adminMode && (
+                <a 
+                  href={`/api/${api.id}/edit`}
+                  style={{ 
+                    marginLeft: '10px', 
+                    color: '#2563EB', 
+                    fontWeight: 'bold' 
+                  }}
+                >
+                  Edit
+                </a>
+              )}
             </div>
           </li>
         ))}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-function EditApi() {
+function EditApi({ adminMode }) {
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -155,21 +155,23 @@ function EditApi() {
 
         <br /><br />
 
-        {/* SAVE BUTTON */}
-        <button
-          type="submit"
-          style={{
-            backgroundColor: '#2563EB',
-            color: 'white',
-            padding: '10px 18px',
-            borderRadius: '4px',
-            border: 'none',
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}
-        >
-          Save Changes
-        </button>
+        {/* CONDITIONAL SAVE BUTTON */}
+        {adminMode && (
+          <button
+            type="submit"
+            style={{
+              backgroundColor: '#2563EB',
+              color: 'white',
+              padding: '10px 18px',
+              borderRadius: '4px',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            Save Changes
+          </button>
+        )}
 
       </form>
     </div>
