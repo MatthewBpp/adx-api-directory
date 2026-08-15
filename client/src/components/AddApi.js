@@ -7,11 +7,15 @@ function AddApi({ adminMode }) {
 
   const [api, setApi] = useState({
     name: "",
-    domain: "Payments",
-    method: "GET",
-    status: "Up-to-date",
+    domain: "",
+    method: "",
+    status: "",
     owner: "",
-    description: ""
+    description: "",
+    requestParams: "{}",
+    responseSchema: "{}",
+    examplePayload: "{}",
+    authentication: ""
   });
 
   const handleSave = (e) => {
@@ -27,148 +31,234 @@ function AddApi({ adminMode }) {
   };
 
   return (
-    <div style={{ padding: '20px', color: '#1A1F2B' }}>
-      <h1 style={{ color: '#1A1F2B' }}>Add New API</h1>
+    <div style={{ padding: '30px', color: '#1A1F2B', maxWidth: '900px', margin: '0 auto' }}>
+      <h1 style={{ marginBottom: '20px' }}>Add New API</h1>
 
       <form onSubmit={handleSave}>
 
-        {/* NAME */}
-        <label style={{ color: '#2E3445' }}>
-          Name:
-          <input
-            type="text"
-            value={api.name}
-            onChange={(e) => setApi({ ...api, name: e.target.value })}
-            required
-            style={{
-              padding: '8px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px',
-              marginLeft: '10px'
-            }}
-          />
-        </label>
+        {/* GRID LAYOUT */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '20px'
+        }}>
 
-        <br /><br />
+          {/* NAME */}
+          <div>
+            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Name</label>
+            <input
+              type="text"
+              value={api.name}
+              onChange={(e) => setApi({ ...api, name: e.target.value })}
+              required
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #CBD5E1',
+                borderRadius: '4px',
+                marginTop: '6px'
+              }}
+            />
+          </div>
 
-        {/* DOMAIN */}
-        <label style={{ color: '#2E3445' }}>
-          Domain:
-          <select
-            value={api.domain}
-            onChange={(e) => setApi({ ...api, domain: e.target.value })}
-            style={{
-              marginLeft: '10px',
-              padding: '6px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px'
-            }}
-          >
-            <option>Payments</option>
-            <option>Customer</option>
-            <option>Accounts</option>
-            <option>Cards</option>
-          </select>
-        </label>
+          {/* DOMAIN */}
+          <div>
+            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Domain</label>
+            <select
+              value={api.domain}
+              onChange={(e) => setApi({ ...api, domain: e.target.value })}
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #CBD5E1',
+                borderRadius: '4px',
+                marginTop: '6px'
+              }}
+            >
+              <option value="">Select Domain</option>
+              <option>Payments</option>
+              <option>Customer</option>
+              <option>Accounts</option>
+              <option>Cards</option>
+            </select>
+          </div>
 
-        <br /><br />
+          {/* METHOD */}
+          <div>
+            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Method</label>
+            <select
+              value={api.method}
+              onChange={(e) => setApi({ ...api, method: e.target.value })}
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #CBD5E1',
+                borderRadius: '4px',
+                marginTop: '6px'
+              }}
+            >
+              <option value="">Select Method</option>
+              <option>GET</option>
+              <option>POST</option>
+              <option>PUT</option>
+              <option>DELETE</option>
+            </select>
+          </div>
 
-        {/* METHOD */}
-        <label style={{ color: '#2E3445' }}>
-          Method:
-          <select
-            value={api.method}
-            onChange={(e) => setApi({ ...api, method: e.target.value })}
-            style={{
-              marginLeft: '10px',
-              padding: '6px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px'
-            }}
-          >
-            <option>GET</option>
-            <option>POST</option>
-            <option>PUT</option>
-            <option>DELETE</option>
-          </select>
-        </label>
+          {/* STATUS */}
+          <div>
+            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Status</label>
+            <select
+              value={api.status}
+              onChange={(e) => setApi({ ...api, status: e.target.value })}
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #CBD5E1',
+                borderRadius: '4px',
+                marginTop: '6px'
+              }}
+            >
+              <option value="">Select Status</option>
+              <option>Up-to-date</option>
+              <option>Needs Review</option>
+            </select>
+          </div>
 
-        <br /><br />
+          {/* OWNER */}
+          <div>
+            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Owner</label>
+            <input
+              type="text"
+              value={api.owner}
+              onChange={(e) => setApi({ ...api, owner: e.target.value })}
+              required
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #CBD5E1',
+                borderRadius: '4px',
+                marginTop: '6px'
+              }}
+            />
+          </div>
 
-        {/* STATUS */}
-        <label style={{ color: '#2E3445' }}>
-          Status:
-          <select
-            value={api.status}
-            onChange={(e) => setApi({ ...api, status: e.target.value })}
-            style={{
-              marginLeft: '10px',
-              padding: '6px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px'
-            }}
-          >
-            <option>Up-to-date</option>
-            <option>Needs Review</option>
-          </select>
-        </label>
+          {/* AUTHENTICATION */}
+          <div>
+            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Authentication</label>
+            <select
+              value={api.authentication}
+              onChange={(e) => setApi({ ...api, authentication: e.target.value })}
+              style={{
+                width: '100%',
+                padding: '10px',
+                border: '1px solid #CBD5E1',
+                borderRadius: '4px',
+                marginTop: '6px'
+              }}
+            >
+              <option value="">Select Authentication</option>
+              <option>OAuth2</option>
+              <option>API Key</option>
+              <option>JWT</option>
+            </select>
+          </div>
 
-        <br /><br />
-
-        {/* OWNER */}
-        <label style={{ color: '#2E3445' }}>
-          Owner:
-          <input
-            type="text"
-            value={api.owner}
-            onChange={(e) => setApi({ ...api, owner: e.target.value })}
-            required
-            style={{
-              padding: '8px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px',
-              marginLeft: '10px'
-            }}
-          />
-        </label>
-
-        <br /><br />
+        </div>
 
         {/* DESCRIPTION */}
-        <label style={{ color: '#2E3445' }}>
-          Description:
+        <div style={{ marginTop: '30px' }}>
+          <label style={{ fontWeight: 'bold', color: '#2E3445' }}>Description</label>
           <textarea
             value={api.description}
             onChange={(e) => setApi({ ...api, description: e.target.value })}
             style={{
-              padding: '8px',
+              width: '100%',
+              height: '100px',
+              marginTop: '6px',
+              padding: '10px',
               border: '1px solid #CBD5E1',
-              borderRadius: '4px',
-              marginLeft: '10px',
-              width: '300px',
-              height: '120px'
+              borderRadius: '4px'
             }}
           />
-        </label>
+        </div>
 
-        <br /><br />
-
-        {/* CONDITIONAL ADD BUTTON */}
-        {adminMode && (
-          <button
-            type="submit"
+        {/* JSON SECTIONS */}
+        <div style={{ marginTop: '30px' }}>
+          <h3 style={{ color: '#1A1F2B' }}>Request Parameters</h3>
+          <textarea
+            value={api.requestParams}
+            onChange={(e) => setApi({ ...api, requestParams: e.target.value })}
             style={{
-              backgroundColor: '#2563EB',
-              color: 'white',
-              padding: '10px 18px',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer',
-              fontWeight: 'bold'
+              width: '100%',
+              height: '120px',
+              padding: '10px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
             }}
-          >
-            Add API
-          </button>
+          />
+
+          <h3 style={{ marginTop: '20px', color: '#1A1F2B' }}>Response Schema</h3>
+          <textarea
+            value={api.responseSchema}
+            onChange={(e) => setApi({ ...api, responseSchema: e.target.value })}
+            style={{
+              width: '100%',
+              height: '120px',
+              padding: '10px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
+          />
+
+          <h3 style={{ marginTop: '20px', color: '#1A1F2B' }}>Example Payload</h3>
+          <textarea
+            value={api.examplePayload}
+            onChange={(e) => setApi({ ...api, examplePayload: e.target.value })}
+            style={{
+              width: '100%',
+              height: '120px',
+              padding: '10px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px'
+            }}
+          />
+        </div>
+
+        {/* BUTTONS */}
+        {adminMode && (
+          <div style={{ marginTop: '30px', display: 'flex', gap: '20px' }}>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: '#FACC15',
+                color: '#1A1F2B',
+                padding: '12px 20px',
+                borderRadius: '6px',
+                border: 'none',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              Create API
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate('/')}
+              style={{
+                backgroundColor: '#CBD5E1',
+                color: '#1A1F2B',
+                padding: '12px 20px',
+                borderRadius: '6px',
+                border: 'none',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </button>
+          </div>
         )}
 
       </form>

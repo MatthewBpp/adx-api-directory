@@ -4,155 +4,161 @@ function Home({ adminMode }) {
 
   const [apis, setApis] = useState([]);
   const [search, setSearch] = useState("");
-  const [domain, setDomain] = useState("All");
-  const [status, setStatus] = useState("All");
-  const [method, setMethod] = useState("All");
 
   useEffect(() => {
     const params = new URLSearchParams();
-
     if (search) params.append("search", search);
-    if (domain !== "All") params.append("domain", domain);
-    if (status !== "All") params.append("status", status);
-    if (method !== "All") params.append("method", method);
 
     fetch(`/apis?${params.toString()}`)
       .then(res => res.json())
       .then(data => setApis(data));
-  }, [search, domain, status, method]);
+  }, [search]);
+
+  // Featured APIs = first 3
+  const featured = apis.slice(0, 3);
 
   return (
-    <div style={{ padding: '20px', color: '#1A1F2B' }}>
-      <h1 style={{ color: '#1A1F2B' }}>ADX — API Directory</h1>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F8FAFC' }}>
 
-      <div style={{ marginBottom: '20px' }}>
-        <a 
-          href="/add" 
-          style={{ 
-            fontWeight: 'bold',
-            color: '#2563EB'
-          }}
-        >
-          Add New API
-        </a>
-      </div>
+      {/* SIDEBAR */}
+      <aside style={{
+        width: '220px',
+        backgroundColor: '#1A1F2B',
+        color: 'white',
+        padding: '20px'
+      }}>
+        <h2 style={{ marginBottom: '30px' }}>ADX</h2>
 
-      <input
-        type="text"
-        placeholder="Search APIs..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          padding: '8px',
-          border: '1px solid #CBD5E1',
-          borderRadius: '4px',
-          width: '250px',
-          marginBottom: '10px'
-        }}
-      />
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</a>
+          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>APIs</a>
+          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Settings</a>
+          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Help</a>
+          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Sign Out</a>
+        </nav>
+      </aside>
 
-      <div style={{ marginTop: '10px', marginBottom: '20px' }}>
-        <label style={{ color: '#2E3445' }}>
-          Domain:
-          <select 
-            value={domain} 
-            onChange={(e) => setDomain(e.target.value)}
-            style={{
-              marginLeft: '8px',
-              padding: '6px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px'
-            }}
-          >
-            <option>All</option>
-            <option>Payments</option>
-            <option>Customer</option>
-            <option>Accounts</option>
-            <option>Cards</option>
-          </select>
-        </label>
+      {/* MAIN CONTENT */}
+      <main style={{ flex: 1, padding: '30px', color: '#1A1F2B' }}>
 
-        <label style={{ marginLeft: '20px', color: '#2E3445' }}>
-          Status:
-          <select 
-            value={status} 
-            onChange={(e) => setStatus(e.target.value)}
-            style={{
-              marginLeft: '8px',
-              padding: '6px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px'
-            }}
-          >
-            <option>All</option>
-            <option>Up-to-date</option>
-            <option>Needs Review</option>
-          </select>
-        </label>
+        {/* HEADER */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1>ADX — API Directory</h1>
 
-        <label style={{ marginLeft: '20px', color: '#2E3445' }}>
-          Method:
-          <select 
-            value={method} 
-            onChange={(e) => setMethod(e.target.value)}
-            style={{
-              marginLeft: '8px',
-              padding: '6px',
-              border: '1px solid #CBD5E1',
-              borderRadius: '4px'
-            }}
-          >
-            <option>All</option>
-            <option>GET</option>
-            <option>POST</option>
-            <option>PUT</option>
-            <option>DELETE</option>
-          </select>
-        </label>
-      </div>
-
-      <ul>
-        {apis.map(api => (
-          <li key={api.id} style={{ marginBottom: '12px' }}>
-            
+          {adminMode && (
             <a 
-              href={`/api/${api.id}`} 
-              style={{ 
-                textDecoration: 'none',
-                color: '#2563EB',
-                fontWeight: 'bold'
+              href="/add"
+              style={{
+                backgroundColor: '#2563EB',
+                color: 'white',
+                padding: '10px 18px',
+                borderRadius: '4px',
+                fontWeight: 'bold',
+                textDecoration: 'none'
               }}
             >
-              {api.name}
+              + Add API
             </a>
+          )}
+        </div>
 
-            <div style={{ marginTop: '4px' }}>
-              <span><strong>Domain:</strong> {api.domain}</span> &nbsp;|&nbsp;
-              <span><strong>Method:</strong> {api.method}</span> &nbsp;|&nbsp;
+        {/* SEARCH BAR */}
+        <input
+          type="text"
+          placeholder="Search APIs..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            marginTop: '20px',
+            padding: '10px',
+            width: '300px',
+            borderRadius: '4px',
+            border: '1px solid #CBD5E1'
+          }}
+        />
 
-              <span style={{ 
-                color: api.status === "Up-to-date" ? "#22C55E" : "#F59E0B"
-              }}>
-                <strong>Status:</strong> {api.status}
-              </span>
+        {/* FEATURED APIs */}
+        <h2 style={{ marginTop: '40px' }}>Featured APIs</h2>
 
-              {/* Conditionally show Edit link */}
-              {adminMode && (
-                <a 
-                  href={`/api/${api.id}/edit`}
-                  style={{ 
-                    marginLeft: '10px', 
-                    color: '#2563EB', 
-                    fontWeight: 'bold' 
-                  }}
-                >
-                  Edit
-                </a>
-              )}
+        <div style={{
+          display: 'flex',
+          gap: '20px',
+          marginTop: '20px'
+        }}>
+          {featured.map(api => (
+            <div key={api.id} style={{
+              backgroundColor: 'white',
+              border: '1px solid #CBD5E1',
+              borderRadius: '6px',
+              padding: '16px',
+              width: '250px'
+            }}>
+              <h3 style={{ marginBottom: '8px' }}>{api.name}</h3>
+              <p style={{ color: '#475569' }}>{api.description || "No description provided."}</p>
+
+              <a 
+                href={`/api/${api.id}`}
+                style={{ color: '#2563EB', fontWeight: 'bold', textDecoration: 'none' }}
+              >
+                Details
+              </a>
             </div>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </div>
+
+        {/* ALL APIs TABLE */}
+        <h2 style={{ marginTop: '40px' }}>All APIs</h2>
+
+        <table style={{
+          width: '100%',
+          marginTop: '20px',
+          borderCollapse: 'collapse'
+        }}>
+          <thead>
+            <tr style={{ backgroundColor: '#E2E8F0' }}>
+              <th style={{ padding: '12px', textAlign: 'left' }}>API Name</th>
+              <th style={{ padding: '12px', textAlign: 'left' }}>Description</th>
+              <th style={{ padding: '12px', textAlign: 'left' }}>Status</th>
+              <th style={{ padding: '12px', textAlign: 'left' }}>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {apis.map(api => (
+              <tr key={api.id} style={{ borderBottom: '1px solid #CBD5E1' }}>
+                <td style={{ padding: '12px' }}>{api.name}</td>
+                <td style={{ padding: '12px' }}>{api.description || "No description"}</td>
+                <td style={{ padding: '12px' }}>
+                  <span style={{
+                    color: api.status === "Up-to-date" ? "#22C55E" : "#F59E0B",
+                    fontWeight: 'bold'
+                  }}>
+                    {api.status}
+                  </span>
+                </td>
+                <td style={{ padding: '12px' }}>
+                  <a 
+                    href={`/api/${api.id}`}
+                    style={{ color: '#2563EB', marginRight: '12px', textDecoration: 'none' }}
+                  >
+                    Details
+                  </a>
+
+                  {adminMode && (
+                    <a 
+                      href={`/api/${api.id}/edit`}
+                      style={{ color: '#2563EB', textDecoration: 'none' }}
+                    >
+                      Edit
+                    </a>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+      </main>
     </div>
   );
 }
