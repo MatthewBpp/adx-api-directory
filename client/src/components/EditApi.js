@@ -14,8 +14,14 @@ function EditApi({ adminMode }) {
       .then(data => setApi({
         ...data,
 
-        // Ensure these fields always load correctly
-        requestParams: Array.isArray(data.requestParams) ? data.requestParams : [],
+        // Request parameters stored as STRING for editing
+        requestParams: JSON.stringify(
+          Array.isArray(data.requestParams) ? data.requestParams : [],
+          null,
+          2
+        ),
+
+        // These remain simple editable strings
         responseSchema: data.responseSchema || "{}",
         examplePayload: data.examplePayload || "{}",
         authentication: data.authentication || ""
@@ -27,16 +33,31 @@ function EditApi({ adminMode }) {
   }
 
   const handleSave = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    fetch(`/apis/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(api)
-    })
-      .then(res => res.json())
-      .then(() => navigate(`/api/${id}`));
+  let parsedParams;
+
+  try {
+    parsedParams = JSON.parse(api.requestParams);
+  } catch {
+    alert("Request Parameters must be valid JSON.\nExample:\n[\n  { \"name\": \"id\", \"type\": \"string\" }\n]");
+    return; // stop save
+  }
+
+  const payload = {
+    ...api,
+    requestParams: parsedParams
   };
+
+  fetch(`/apis/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .then(() => navigate(`/api/${id}`));
+};
+
 
   return (
     <div style={{ padding: '30px', color: '#1A1F2B', maxWidth: '900px', margin: '0 auto' }}>
@@ -208,18 +229,8 @@ function EditApi({ adminMode }) {
           {/* REQUEST PARAMETERS */}
           <h3 style={{ color: '#1A1F2B' }}>Request Parameters</h3>
           <textarea
-            value={JSON.stringify(api.requestParams, null, 2)}
-            onChange={(e) => {
-              try {
-                const parsed = JSON.parse(e.target.value);
-                setApi({
-                  ...api,
-                  requestParams: Array.isArray(parsed) ? parsed : []
-                });
-              } catch {
-                console.log("Invalid JSON in request parameters");
-              }
-            }}
+            value={api.requestParams}
+            onChange={(e) => setApi({ ...api, requestParams: e.target.value })}
             style={{
               width: '100%',
               height: '120px',

@@ -6,13 +6,13 @@
     "method": "POST",
     "status": "Up-to-date",
     "owner": "Payments Team",
-    "lastUpdated": "2026-08-15",
+    "lastUpdated": "2026-08-16",
     "requestParams": [],
-    "responseSchema": "{EFG}",
-    "examplePayload": "{This is a test}",
+    "responseSchema": "{\n  \"status\": {\n    \"type\": \"string\",\n    \"description\": \"Indicates whether the request was successful (e.g., 'success', 'error')\"\n  },\n  \"data\": {\n    \"type\": \"object\",\n    \"description\": \"Main payload returned by the API\",\n    \"properties\": {\n      \"userId\": {\n        \"type\": \"string\",\n        \"description\": \"Unique identifier of the user\"\n      },\n      \"records\": {\n        \"type\": \"array\",\n        \"description\": \"List of returned records\",\n        \"items\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"recordId\": {\n              \"type\": \"string\",\n              \"description\": \"Unique identifier for the record\"\n            },\n            \"value\": {\n              \"type\": \"number\",\n              \"description\": \"Numeric value associated with the record\"\n            }\n          }\n        }\n      }\n    }\n  },\n  \"error\": {\n    \"type\": \"object\",\n    \"description\": \"Error details when status = 'error'\",\n    \"properties\": {\n      \"code\": {\n        \"type\": \"string\",\n        \"description\": \"Machine-readable error code\"\n      },\n      \"message\": {\n        \"type\": \"string\",\n        \"description\": \"Human-readable error message\"\n      }\n    }\n  }\n}\n",
+    "examplePayload": "{\n  \"status\": \"success\",\n  \"data\": {\n    \"userId\": \"u_4839201\",\n    \"records\": [\n      {\n        \"recordId\": \"rec_001\",\n        \"value\": 42\n      },\n      {\n        \"recordId\": \"rec_002\",\n        \"value\": 87\n      },\n      {\n        \"recordId\": \"rec_003\",\n        \"value\": 13\n      }\n    ]\n  },\n  \"error\": null\n}\n",
     "authentication": "",
     "documentationFreshness": "Up-to-date",
-    "description": "This is a test 123"
+    "description": "Asdas This is a test 123 ascascasdsa"
   },
   {
     "id": 2,
