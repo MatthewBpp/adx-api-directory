@@ -30,11 +30,13 @@ function Home({ adminMode }) {
         <h2 style={{ marginBottom: '30px' }}>ADX</h2>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</a>
-          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>APIs</a>
-          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Help</a>
-          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Sign Out</a>
-        </nav>
+        <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</a>
+        <a href="/apis" style={{ color: 'white', textDecoration: 'none' }}>APIs</a>
+        <a href="/services" style={{ color: 'white', textDecoration: 'none' }}>Services</a>
+        <a href="/help" style={{ color: 'white', textDecoration: 'none' }}>Help</a>
+        <a href="/logout" style={{ color: 'white', textDecoration: 'none' }}>Sign Out</a>
+</nav>
+
       </aside>
 
       {/* MAIN CONTENT */}

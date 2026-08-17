@@ -31,140 +31,142 @@ function AddApi({ adminMode }) {
   };
 
   return (
-    <div style={{ padding: '30px', color: '#1A1F2B', maxWidth: '900px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '20px' }}>Add New API</h1>
+    <div style={{ padding: '30px', color: '#1A1F2B', maxWidth: '1100px', margin: '0 auto' }}>
+  <h1 style={{ marginBottom: '20px' }}>Add New API</h1>
 
-      <form onSubmit={handleSave}>
+  <form onSubmit={handleSave}>
 
-        {/* GRID LAYOUT */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '20px'
-        }}>
+    {/* NAME - FULL WIDTH */}
+    <div style={{ marginBottom: '20px' }}>
+      <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Name</label>
+      <input
+        type="text"
+        value={api.name}
+        onChange={(e) => setApi({ ...api, name: e.target.value })}
+        required
+        style={{
+          width: '100%',
+          padding: '10px',
+          border: '1px solid #CBD5E1',
+          borderRadius: '4px',
+          marginTop: '6px'
+        }}
+      />
+    </div>
 
-          {/* NAME */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Name</label>
-            <input
-              type="text"
-              value={api.name}
-              onChange={(e) => setApi({ ...api, name: e.target.value })}
-              required
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            />
-          </div>
+    {/* DOMAIN - FULL WIDTH */}
+    <div style={{ marginBottom: '20px' }}>
+      <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Domain</label>
+      <select
+        value={api.domain}
+        onChange={(e) => setApi({ ...api, domain: e.target.value })}
+        style={{
+          width: '100%',
+          padding: '10px',
+          border: '1px solid #CBD5E1',
+          borderRadius: '4px',
+          marginTop: '6px'
+        }}
+      >
+        <option value="">Select Domain</option>
+        <option>Payments</option>
+        <option>Customer</option>
+        <option>Accounts</option>
+        <option>Cards</option>
+      </select>
+    </div>
 
-          {/* DOMAIN */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Domain</label>
-            <select
-              value={api.domain}
-              onChange={(e) => setApi({ ...api, domain: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            >
-              <option value="">Select Domain</option>
-              <option>Payments</option>
-              <option>Customer</option>
-              <option>Accounts</option>
-              <option>Cards</option>
-            </select>
-          </div>
+    {/* GRID FOR METHOD / STATUS / OWNER */}
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      columnGap: '20px',
+      rowGap: '30px'
+    }}>
 
-          {/* METHOD */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Method</label>
-            <select
-              value={api.method}
-              onChange={(e) => setApi({ ...api, method: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            >
-              <option value="">Select Method</option>
-              <option>GET</option>
-              <option>POST</option>
-              <option>PUT</option>
-              <option>DELETE</option>
-            </select>
-          </div>
+      {/* METHOD */}
+      <div>
+        <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Method</label>
+        <select
+          value={api.method}
+          onChange={(e) => setApi({ ...api, method: e.target.value })}
+          style={{
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #CBD5E1',
+            borderRadius: '4px',
+            marginTop: '6px'
+          }}
+        >
+          <option value="">Select Method</option>
+          <option>GET</option>
+          <option>POST</option>
+          <option>PUT</option>
+          <option>DELETE</option>
+        </select>
+      </div>
 
-          {/* STATUS */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Status</label>
-            <select
-              value={api.status}
-              onChange={(e) => setApi({ ...api, status: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            >
-              <option value="">Select Status</option>
-              <option>Up-to-date</option>
-              <option>Needs Review</option>
-            </select>
-          </div>
+      {/* STATUS */}
+      <div>
+        <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Status</label>
+        <select
+          value={api.status}
+          onChange={(e) => setApi({ ...api, status: e.target.value })}
+          style={{
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #CBD5E1',
+            borderRadius: '4px',
+            marginTop: '6px'
+          }}
+        >
+          <option value="">Select Status</option>
+          <option>Up-to-date</option>
+          <option>Needs Review</option>
+        </select>
+      </div>
 
-          {/* OWNER */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Owner</label>
-            <input
-              type="text"
-              value={api.owner}
-              onChange={(e) => setApi({ ...api, owner: e.target.value })}
-              required
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            />
-          </div>
+      {/* OWNER */}
+      <div>
+        <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Owner</label>
+        <input
+          type="text"
+          value={api.owner}
+          onChange={(e) => setApi({ ...api, owner: e.target.value })}
+          required
+          style={{
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #CBD5E1',
+            borderRadius: '4px',
+            marginTop: '6px'
+          }}
+        />
+      </div>
 
-          {/* AUTHENTICATION */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Authentication</label>
-            <select
-              value={api.authentication}
-              onChange={(e) => setApi({ ...api, authentication: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            >
-              <option value="">Select Authentication</option>
-              <option>OAuth2</option>
-              <option>API Key</option>
-              <option>JWT</option>
-            </select>
-          </div>
+    </div>
 
-        </div>
+    {/* AUTHENTICATION - FULL WIDTH */}
+    <div style={{ marginTop: '20px' }}>
+      <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Authentication</label>
+      <select
+        value={api.authentication}
+        onChange={(e) => setApi({ ...api, authentication: e.target.value })}
+        style={{
+          width: '100%',
+          padding: '10px',
+          border: '1px solid #CBD5E1',
+          borderRadius: '4px',
+          marginTop: '6px'
+        }}
+      >
+        <option value="">Select Authentication</option>
+        <option>OAuth2</option>
+        <option>API Key</option>
+        <option>JWT</option>
+      </select>
+    </div>
+
 
         {/* DESCRIPTION */}
         <div style={{ marginTop: '30px' }}>

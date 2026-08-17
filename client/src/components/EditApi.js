@@ -13,15 +13,11 @@ function EditApi({ adminMode }) {
       .then(res => res.json())
       .then(data => setApi({
         ...data,
-
-        // Request parameters stored as STRING for editing
         requestParams: JSON.stringify(
           Array.isArray(data.requestParams) ? data.requestParams : [],
           null,
           2
         ),
-
-        // These remain simple editable strings
         responseSchema: data.responseSchema || "{}",
         examplePayload: data.examplePayload || "{}",
         authentication: data.authentication || ""
@@ -33,82 +29,82 @@ function EditApi({ adminMode }) {
   }
 
   const handleSave = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  let parsedParams;
+    let parsedParams;
 
-  try {
-    parsedParams = JSON.parse(api.requestParams);
-  } catch {
-    alert("Request Parameters must be valid JSON.\nExample:\n[\n  { \"name\": \"id\", \"type\": \"string\" }\n]");
-    return; // stop save
-  }
+    try {
+      parsedParams = JSON.parse(api.requestParams);
+    } catch {
+      alert("Request Parameters must be valid JSON.\nExample:\n[\n  { \"name\": \"id\", \"type\": \"string\" }\n]");
+      return;
+    }
 
-  const payload = {
-    ...api,
-    requestParams: parsedParams
+    const payload = {
+      ...api,
+      requestParams: parsedParams
+    };
+
+    fetch(`/apis/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(() => navigate(`/api/${id}`));
   };
 
-  fetch(`/apis/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  })
-    .then(res => res.json())
-    .then(() => navigate(`/api/${id}`));
-};
-
-
   return (
-    <div style={{ padding: '30px', color: '#1A1F2B', maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ padding: '30px', color: '#1A1F2B', maxWidth: '1100px', margin: '0 auto' }}>
       <h1 style={{ marginBottom: '20px' }}>Edit API: {api.name}</h1>
 
       <form onSubmit={handleSave}>
 
-        {/* GRID LAYOUT */}
+        {/* NAME - FULL WIDTH */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Name</label>
+          <input
+            type="text"
+            value={api.name}
+            onChange={(e) => setApi({ ...api, name: e.target.value })}
+            style={{
+              width: '100%',
+              padding: '10px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginTop: '6px'
+            }}
+          />
+        </div>
+
+        {/* DOMAIN - FULL WIDTH */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Domain</label>
+          <select
+            value={api.domain}
+            onChange={(e) => setApi({ ...api, domain: e.target.value })}
+            style={{
+              width: '100%',
+              padding: '10px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginTop: '6px'
+            }}
+          >
+            <option>Payments</option>
+            <option>Customer</option>
+            <option>Accounts</option>
+            <option>Cards</option>
+          </select>
+        </div>
+
+        {/* GRID FOR METHOD / STATUS / OWNER */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: '20px'
+          columnGap: '20px',
+          rowGap: '30px'
         }}>
-
-          {/* NAME */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Name</label>
-            <input
-              type="text"
-              value={api.name}
-              onChange={(e) => setApi({ ...api, name: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            />
-          </div>
-
-          {/* DOMAIN */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Domain</label>
-            <select
-              value={api.domain}
-              onChange={(e) => setApi({ ...api, domain: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            >
-              <option>Payments</option>
-              <option>Customer</option>
-              <option>Accounts</option>
-              <option>Cards</option>
-            </select>
-          </div>
 
           {/* METHOD */}
           <div>
@@ -167,31 +163,31 @@ function EditApi({ adminMode }) {
             />
           </div>
 
-          {/* AUTHENTICATION */}
-          <div>
-            <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Authentication</label>
-            <select
-              value={api.authentication}
-              onChange={(e) => setApi({ ...api, authentication: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px',
-                border: '1px solid #CBD5E1',
-                borderRadius: '4px',
-                marginTop: '6px'
-              }}
-            >
-              <option value="">Select Authentication</option>
-              <option>OAuth2</option>
-              <option>API Key</option>
-              <option>JWT</option>
-            </select>
-          </div>
+        </div>
 
+        {/* AUTHENTICATION - FULL WIDTH */}
+        <div style={{ marginTop: '20px' }}>
+          <label style={{ color: '#2E3445', fontWeight: 'bold' }}>Authentication</label>
+          <select
+            value={api.authentication}
+            onChange={(e) => setApi({ ...api, authentication: e.target.value })}
+            style={{
+              width: '100%',
+              padding: '10px',
+              border: '1px solid #CBD5E1',
+              borderRadius: '4px',
+              marginTop: '6px'
+            }}
+          >
+            <option value="">Select Authentication</option>
+            <option>OAuth2</option>
+            <option>API Key</option>
+            <option>JWT</option>
+          </select>
         </div>
 
         {/* LAST UPDATED */}
-        <div style={{ marginTop: '20px' }}>
+        <div style={{ marginTop: '30px' }}>
           <label style={{ fontWeight: 'bold', color: '#2E3445' }}>Last Updated</label>
           <div style={{ marginTop: '6px', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span>{api.lastUpdated || "Unknown"}</span>
@@ -225,8 +221,6 @@ function EditApi({ adminMode }) {
 
         {/* JSON SECTIONS */}
         <div style={{ marginTop: '30px' }}>
-
-          {/* REQUEST PARAMETERS */}
           <h3 style={{ color: '#1A1F2B' }}>Request Parameters</h3>
           <textarea
             value={api.requestParams}
@@ -240,7 +234,6 @@ function EditApi({ adminMode }) {
             }}
           />
 
-          {/* RESPONSE SCHEMA */}
           <h3 style={{ marginTop: '20px', color: '#1A1F2B' }}>Response Schema</h3>
           <textarea
             value={api.responseSchema}
@@ -254,7 +247,6 @@ function EditApi({ adminMode }) {
             }}
           />
 
-          {/* EXAMPLE PAYLOAD */}
           <h3 style={{ marginTop: '20px', color: '#1A1F2B' }}>Example Payload</h3>
           <textarea
             value={api.examplePayload}
@@ -267,7 +259,6 @@ function EditApi({ adminMode }) {
               borderRadius: '4px'
             }}
           />
-
         </div>
 
         {/* BUTTONS */}
@@ -297,8 +288,7 @@ function EditApi({ adminMode }) {
                 padding: '12px 20px',
                 borderRadius: '6px',
                 border: 'none',
-                fontWeight: 'bold',
-                cursor: 'pointer'
+                fontWeight: 'bold'
               }}
             >
               Cancel
