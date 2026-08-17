@@ -9,20 +9,32 @@ function EditApi({ adminMode }) {
   const [api, setApi] = useState(null);
 
   useEffect(() => {
-    fetch(`/apis/${id}`)
-      .then(res => res.json())
-      .then(data => setApi({
+  fetch(`/apis/${id}`)
+    .then(res => res.json())
+    .then(data => {
+
+      const safeParse = (value, fallback) => {
+        try {
+          return typeof value === "object" ? value : JSON.parse(value);
+        } catch {
+          return fallback;
+        }
+      };
+
+      const safeRequestParams = safeParse(data.requestParams, []);
+      const safeResponseSchema = safeParse(data.responseSchema, {});
+      const safeExamplePayload = safeParse(data.examplePayload, {});
+
+      setApi({
         ...data,
-        requestParams: JSON.stringify(
-          Array.isArray(data.requestParams) ? data.requestParams : [],
-          null,
-          2
-        ),
-        responseSchema: data.responseSchema || "{}",
-        examplePayload: data.examplePayload || "{}",
+        requestParams: JSON.stringify(safeRequestParams, null, 2),
+        responseSchema: JSON.stringify(safeResponseSchema, null, 2),
+        examplePayload: JSON.stringify(safeExamplePayload, null, 2),
         authentication: data.authentication || ""
-      }));
-  }, [id]);
+      });
+    });
+}, [id]);
+
 
   if (!api) {
     return <p style={{ color: '#1A1F2B' }}>Loading API...</p>;
@@ -31,18 +43,22 @@ function EditApi({ adminMode }) {
   const handleSave = (e) => {
     e.preventDefault();
 
-    let parsedParams;
+    let parsedParams, parsedSchema, parsedExample;
 
     try {
       parsedParams = JSON.parse(api.requestParams);
+      parsedSchema = JSON.parse(api.responseSchema);
+      parsedExample = JSON.parse(api.examplePayload);
     } catch {
-      alert("Request Parameters must be valid JSON.\nExample:\n[\n  { \"name\": \"id\", \"type\": \"string\" }\n]");
+      alert("All JSON fields must contain valid JSON.\n\nExample Request Parameters:\n[\n  { \"name\": \"id\", \"type\": \"string\" }\n]");
       return;
     }
 
     const payload = {
       ...api,
-      requestParams: parsedParams
+      requestParams: parsedParams,
+      responseSchema: parsedSchema,
+      examplePayload: parsedExample
     };
 
     fetch(`/apis/${id}`, {

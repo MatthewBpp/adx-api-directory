@@ -10,13 +10,29 @@ function ApiDetails({ adminMode }) {
   useEffect(() => {
     fetch(`/apis/${id}`)
       .then(res => res.json())
-      .then(data => setApi({
-        ...data,
-        requestParams: data.requestParams || [],
-        responseSchema: data.responseSchema || "{}",
-        examplePayload: data.examplePayload || "{}",
-        authentication: data.authentication || ""
-      }));
+      .then(data => {
+
+        // Safe JSON parsing for all fields
+        const safeParse = (value, fallback) => {
+          try {
+            return typeof value === "object" ? value : JSON.parse(value);
+          } catch {
+            return fallback;
+          }
+        };
+
+        const safeRequestParams = safeParse(data.requestParams, []);
+        const safeResponseSchema = safeParse(data.responseSchema, {});
+        const safeExamplePayload = safeParse(data.examplePayload, {});
+
+        setApi({
+          ...data,
+          requestParams: safeRequestParams,
+          responseSchema: safeResponseSchema,
+          examplePayload: safeExamplePayload,
+          authentication: data.authentication || ""
+        });
+      });
   }, [id]);
 
   if (!api) {
@@ -105,9 +121,10 @@ function ApiDetails({ adminMode }) {
           border: '1px solid #CBD5E1',
           padding: '12px',
           borderRadius: '4px',
-          marginTop: '10px'
+          marginTop: '10px',
+          whiteSpace: 'pre-wrap'
         }}>
-          {api.responseSchema}
+          {JSON.stringify(api.responseSchema, null, 2)}
         </pre>
       </section>
 
@@ -119,9 +136,10 @@ function ApiDetails({ adminMode }) {
           border: '1px solid #CBD5E1',
           padding: '12px',
           borderRadius: '4px',
-          marginTop: '10px'
+          marginTop: '10px',
+          whiteSpace: 'pre-wrap'
         }}>
-          {api.examplePayload}
+          {JSON.stringify(api.examplePayload, null, 2)}
         </pre>
       </section>
 
