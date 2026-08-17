@@ -30,19 +30,18 @@ function Home({ adminMode }) {
         <h2 style={{ marginBottom: '30px' }}>ADX</h2>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</a>
-        <a href="/apis" style={{ color: 'white', textDecoration: 'none' }}>APIs</a>
-        <a href="/services" style={{ color: 'white', textDecoration: 'none' }}>Services</a>
-        <a href="/help" style={{ color: 'white', textDecoration: 'none' }}>Help</a>
-        <a href="/logout" style={{ color: 'white', textDecoration: 'none' }}>Sign Out</a>
-</nav>
-
+          <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</a>
+          <a href="/apis" style={{ color: 'white', textDecoration: 'none' }}>APIs</a>
+          <a href="/services" style={{ color: 'white', textDecoration: 'none' }}>Services</a>
+          <a href="/help" style={{ color: 'white', textDecoration: 'none' }}>Help</a>
+          <a href="/logout" style={{ color: 'white', textDecoration: 'none' }}>Sign Out</a>
+        </nav>
       </aside>
 
       {/* MAIN CONTENT */}
-        <main style={{ flex: 1, padding: '30px', color: '#1A1F2B' }}>
+      <main style={{ flex: 1, padding: '30px', color: '#1A1F2B' }}>
 
-       {/* HEADER */}
+        {/* HEADER */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -70,8 +69,6 @@ function Home({ adminMode }) {
             </a>
           )}
         </div>
-
-
 
         {/* SEARCH BAR */}
         <input
@@ -147,21 +144,48 @@ function Home({ adminMode }) {
                     {api.status}
                   </span>
                 </td>
-                <td style={{ padding: '12px' }}>
+
+                {/* UPDATED ACTIONS COLUMN */}
+                <td style={{ padding: '12px', display: 'flex', gap: '12px', alignItems: 'center' }}>
                   <a 
                     href={`/api/${api.id}`}
-                    style={{ color: '#2563EB', marginRight: '12px', textDecoration: 'none' }}
+                    style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 'bold' }}
                   >
                     Details
                   </a>
 
                   {adminMode && (
-                    <a 
-                      href={`/api/${api.id}/edit`}
-                      style={{ color: '#2563EB', textDecoration: 'none' }}
-                    >
-                      Edit
-                    </a>
+                    <>
+                      <a 
+                        href={`/api/${api.id}/edit`}
+                        style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 'bold' }}
+                      >
+                        Edit
+                      </a>
+
+                      <button
+                        onClick={() => {
+                          if (window.confirm("Are you sure you want to delete this API?")) {
+                            fetch(`/apis/${api.id}`, { method: "DELETE" })
+                              .then(() => {
+                                // Remove deleted API from list
+                                setApis(prev => prev.filter(a => a.id !== api.id));
+                              });
+                          }
+                        }}
+                        style={{
+                          backgroundColor: '#EF4444',
+                          color: 'white',
+                          border: 'none',
+                          padding: '6px 12px',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>

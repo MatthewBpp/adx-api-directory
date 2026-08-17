@@ -1,23 +1,269 @@
 [
   {
-    "name": "MyApi",
+    "name": "Customer Budget API",
+    "domain": "Customer",
+    "method": "GET",
+    "status": "Up-to-date",
+    "owner": "Customer Insights Team",
+    "description": "Retrieves a customer’s monthly budgeting profile.\nTesting a small change",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Unique customer identifier"
+      }
+    ],
+    "responseSchema": {
+      "monthlyIncome": "number",
+      "monthlyExpenses": "number",
+      "savingsRate": "number",
+      "budgetCategories": [
+        {
+          "category": "string",
+          "amount": "number"
+        }
+      ]
+    },
+    "examplePayload": {
+      "monthlyIncome": 3200,
+      "monthlyExpenses": 2400,
+      "savingsRate": 25,
+      "budgetCategories": [
+        {
+          "category": "Food",
+          "amount": 400
+        },
+        {
+          "category": "Transport",
+          "amount": 150
+        }
+      ]
+    },
+    "authentication": "",
+    "id": 10,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Customer Vulnerability API",
+    "domain": "Customer",
+    "method": "GET",
+    "status": "Needs Review",
+    "owner": "Vulnerable Team",
+    "description": "Returns vulnerability flags for customer safeguarding and support.\n",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Customer identifier"
+      }
+    ],
+    "responseSchema": "{\n  \"isVulnerable\": \"boolean\",\n  \"vulnerabilityType\": \"string\",\n  \"notes\": \"string\"\n}\n",
+    "examplePayload": "{\n  \"isVulnerable\": true,\n  \"vulnerabilityType\": \"Financial Difficulty\",\n  \"notes\": \"Customer recently missed payments\"\n}\n",
+    "authentication": "",
+    "id": 11,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Customer Account Summary API",
+    "domain": "Accounts",
+    "method": "GET",
+    "status": "Up-to-date",
+    "owner": "Accounts Platform",
+    "description": "Retrieves account information such as balances and account metadata",
+    "requestParams": [
+      {
+        "name": "accountId",
+        "type": "string",
+        "required": true,
+        "description": "Bank account identifier"
+      }
+    ],
+    "responseSchema": "{\n  \"accountId\": \"string\",\n  \"sortCode\": \"string\",\n  \"balance\": \"number\",\n  \"availableBalance\": \"number\",\n  \"accountType\": \"string\"\n}\n",
+    "examplePayload": "{\n  \"accountId\": \"ACC123\",\n  \"sortCode\": \"12-34-56\",\n  \"balance\": 1500.75,\n  \"availableBalance\": 1400.00,\n  \"accountType\": \"Current\"\n}\n",
+    "authentication": "OAuth2",
+    "id": 12,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Customer Contact API",
+    "domain": "Customer",
+    "method": "GET",
+    "status": "Up-to-date",
+    "owner": "Customer Platform",
+    "description": "Retrieves customer contact details such as phone numbers and email addresses. ",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Customer identifier"
+      }
+    ],
+    "responseSchema": "{\n  \"phoneNumber\": \"string\",\n  \"email\": \"string\",\n  \"preferredContactMethod\": \"string\"\n}\n",
+    "examplePayload": "{\n  \"phoneNumber\": \"+44123456789\",\n  \"email\": \"customer@example.com\",\n  \"preferredContactMethod\": \"SMS\"\n}\n",
+    "authentication": "",
+    "id": 13,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Customer Address Api",
+    "domain": "Customer",
+    "method": "GET",
+    "status": "Up-to-date",
+    "owner": "Customer Platform",
+    "description": "Retrieves a customers registered address",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Customer identifier"
+      }
+    ],
+    "responseSchema": "{\n  \"addressLine1\": \"string\",\n  \"addressLine2\": \"string\",\n  \"city\": \"string\",\n  \"postcode\": \"string\",\n  \"country\": \"string\"\n}\n",
+    "examplePayload": "{\n  \"addressLine1\": \"10 Some Street\",\n  \"addressLine2\": \"\",\n  \"city\": \"London\",\n  \"postcode\": \"SW1A AA1\",\n  \"country\": \"UK\"\n}\n",
+    "authentication": "OAuth2",
+    "id": 14,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Customer Situation API",
+    "domain": "Customer",
+    "method": "GET",
+    "status": "Needs Review",
+    "owner": "Customer Insights Team",
+    "description": "Provides contextual information about a customer's financial situation",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Customer identifier"
+      }
+    ],
+    "responseSchema": "{\n  \"employmentStatus\": \"string\",\n  \"incomeStability\": \"string\",\n  \"recentLifeEvents\": [\"string\"]\n}\n",
+    "examplePayload": "{\n  \"employmentStatus\": \"Full-time\",\n  \"incomeStability\": \"Stable\",\n  \"recentLifeEvents\": [\"Moved house\", \"New job\"]\n}\n",
+    "authentication": "OAuth2",
+    "id": 15,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Customer Offers Api",
+    "domain": "Customer",
+    "method": "GET",
+    "status": "Up-to-date",
+    "owner": "Marketing team",
+    "description": "Returns personalised offers for a customer",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Customer identifier"
+      }
+    ],
+    "responseSchema": "{\n  \"offers\": [\n    {\n      \"offerId\": \"string\",\n      \"title\": \"string\",\n      \"description\": \"string\",\n      \"expiryDate\": \"string\"\n    }\n  ]\n}\n",
+    "examplePayload": "{\n  \"offers\": [\n    {\n      \"offerId\": \"OFF123\",\n      \"title\": \"Credit Card Cashback\",\n      \"description\": \"5% cashback for 3 months\",\n      \"expiryDate\": \"2026-12-31\"\n    }\n  ]\n}\n",
+    "authentication": "OAuth2",
+    "id": 16,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Borrowing Eligibility Api",
+    "domain": "Accounts",
+    "method": "POST",
+    "status": "Up-to-date",
+    "owner": "Lending Platform",
+    "description": "Determines whether a customer is eligible for borrowing",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Customer identifier"
+      },
+      {
+        "name": "requestedAmount",
+        "type": "number",
+        "required": true,
+        "description": "Loan amount requested"
+      }
+    ],
+    "responseSchema": "{\n  \"eligible\": \"boolean\",\n  \"maxBorrowAmount\": \"number\",\n  \"reason\": \"string\"\n}\n",
+    "examplePayload": "{\n  \"eligible\": true,\n  \"maxBorrowAmount\": 12000,\n  \"reason\": \"Meets affordability criteria\"\n}\n",
+    "authentication": "OAuth2",
+    "id": 17,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Transaction History Api",
+    "domain": "Accounts",
+    "method": "GET",
+    "status": "Up-to-date",
+    "owner": "Accounts Platform",
+    "description": "Retrieves recent account transactions",
+    "requestParams": [
+      {
+        "name": "accountId",
+        "type": "string",
+        "required": true,
+        "description": "Account identifier"
+      }
+    ],
+    "responseSchema": "{\n  \"transactions\": [\n    {\n      \"date\": \"string\",\n      \"description\": \"string\",\n      \"amount\": \"number\",\n      \"balanceAfter\": \"number\"\n    }\n  ]\n}\n",
+    "examplePayload": "{\n  \"transactions\": [\n    {\n      \"date\": \"2026-08-01\",\n      \"description\": \"Grocery Store\",\n      \"amount\": -45.20,\n      \"balanceAfter\": 1455.55\n    }\n  ]\n}\n",
+    "authentication": "OAuth2",
+    "id": 18,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Direct Debit Api",
     "domain": "Payments",
     "method": "GET",
     "status": "Up-to-date",
-    "owner": "TeamA",
-    "description": "Alpha",
+    "owner": "Payments Team",
+    "description": "Retrieves active direct debits for a customer",
     "requestParams": [
       {
-        "name": "bagencyId, salmon",
+        "name": "customerId",
         "type": "string",
         "required": true,
-        "description": "identifier for the customer"
+        "description": "Customer identifier"
       }
     ],
-    "responseSchema": {},
-    "examplePayload": {},
-    "authentication": "",
-    "id": 9,
+    "responseSchema": "{\n  \"directDebits\": [\n    {\n      \"merchant\": \"string\",\n      \"amount\": \"number\",\n      \"frequency\": \"string\"\n    }\n  ]\n}\n",
+    "examplePayload": "{\n  \"directDebits\": [\n    {\n      \"merchant\": \"Spotify\",\n      \"amount\": 9.99,\n      \"frequency\": \"Monthly\"\n    }\n  ]\n}\n",
+    "authentication": "OAuth2",
+    "id": 19,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "Fraud Risk Api",
+    "domain": "Payments",
+    "method": "POST",
+    "status": "Needs Review",
+    "owner": "Fraud Platofrm",
+    "description": "Assess fraud risk for a transaction",
+    "requestParams": [
+      {
+        "name": "transactionId",
+        "type": "string",
+        "required": true,
+        "description": "Transaction identifier"
+      },
+      {
+        "name": "amount",
+        "type": "number",
+        "required": true,
+        "description": "Transaction amount"
+      }
+    ],
+    "responseSchema": "{\n  \"riskScore\": \"number\",\n  \"riskLevel\": \"string\",\n  \"recommendation\": \"string\"\n}\n",
+    "examplePayload": "{\n  \"riskScore\": 82,\n  \"riskLevel\": \"High\",\n  \"recommendation\": \"Block transaction\"\n}\n",
+    "authentication": "OAuth2",
+    "id": 20,
     "lastUpdated": "2026-08-17"
   }
 ]
