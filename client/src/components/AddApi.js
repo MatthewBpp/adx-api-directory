@@ -12,23 +12,37 @@ function AddApi({ adminMode }) {
     status: "",
     owner: "",
     description: "",
-    requestParams: "{}",
+    requestParams: "[]",
     responseSchema: "{}",
     examplePayload: "{}",
     authentication: ""
   });
 
   const handleSave = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    fetch(`/apis`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(api)
-    })
-      .then(res => res.json())
-      .then(() => navigate("/"));
+  let parsedParams;
+
+  try {
+    parsedParams = JSON.parse(api.requestParams);
+  } catch {
+    alert("Request Parameters must be valid JSON.\nExample:\n[\n  { \"name\": \"id\", \"type\": \"string\" }\n]");
+    return;
+  }
+
+  const payload = {
+    ...api,
+    requestParams: parsedParams
   };
+
+  fetch(`/apis`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+    .then(res => res.json())
+    .then(() => navigate("/"));
+};
 
   return (
     <div style={{ padding: '30px', color: '#1A1F2B', maxWidth: '1100px', margin: '0 auto' }}>

@@ -8,9 +8,10 @@
     "owner": "Customer Platform",
     "lastUpdated": "2026-08-17",
     "requestParams": [],
-    "responseSchema": "{}",
+    "responseSchema": "{test}",
     "examplePayload": "{}",
-    "authentication": ""
+    "authentication": "",
+    "description": "test"
   },
   {
     "id": 3,
@@ -20,5 +21,103 @@
     "status": "Up-to-date",
     "owner": "Fraud Engineering",
     "lastUpdated": "2026-08-01"
+  },
+  {
+    "name": "Test",
+    "domain": "Payments",
+    "method": "GET",
+    "status": "Up-to-date",
+    "owner": "asdsas",
+    "description": "Test",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Unique identifier for the customer"
+      }
+    ],
+    "responseSchema": "{test}",
+    "examplePayload": "{test}",
+    "authentication": "",
+    "id": 4,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "asdasfd",
+    "domain": "Customer",
+    "method": "PUT",
+    "status": "Up-to-date",
+    "owner": "salsa",
+    "description": "asdasda",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Unique identifier for the customer"
+      }
+    ],
+    "responseSchema": "{abc}",
+    "examplePayload": "{def}",
+    "authentication": "",
+    "id": 5,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "test",
+    "domain": "Customer",
+    "method": "POST",
+    "status": "Up-to-date",
+    "owner": "test",
+    "description": "test",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Unique identifier for the customer"
+      }
+    ],
+    "responseSchema": "{test}",
+    "examplePayload": "{test}",
+    "authentication": "",
+    "id": 6,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "bench",
+    "domain": "Payments",
+    "method": "POST",
+    "status": "Up-to-date",
+    "owner": "adasdas",
+    "description": "",
+    "requestParams": [],
+    "responseSchema": "{}",
+    "examplePayload": "{}",
+    "authentication": "OAuth2",
+    "id": 7,
+    "lastUpdated": "2026-08-17"
+  },
+  {
+    "name": "benc",
+    "domain": "Accounts",
+    "method": "PUT",
+    "status": "Up-to-date",
+    "owner": "benny",
+    "description": "test",
+    "requestParams": [
+      {
+        "name": "customerId",
+        "type": "string",
+        "required": true,
+        "description": "Unique identifier for the customer"
+      }
+    ],
+    "responseSchema": "{HelloWorld}",
+    "examplePayload": "{WorldHello}",
+    "authentication": "",
+    "id": 8,
+    "lastUpdated": "2026-08-17"
   }
 ]

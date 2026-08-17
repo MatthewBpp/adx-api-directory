@@ -102,20 +102,19 @@ app.put('/apis/:id', (req, res) => {
     }
 
     const updated = {
-        ...apis[index],          // keep existing fields
-        ...req.body,             // overwrite edited fields
-        requestParams: Array.isArray(apis[index].requestParams)
-            ? apis[index].requestParams
-            : [],                // ALWAYS preserve array
+        ...apis[index],
+        ...req.body,
+        requestParams: req.body.requestParams,   // ← TRUST THE CLIENT
         lastUpdated: getTimestamp()
     };
 
     apis[index] = updated;
-
     saveApis();
 
     res.json({ message: "API updated successfully", api: updated });
 });
+
+
 
 /**
  * POST /apis
@@ -126,23 +125,19 @@ app.put('/apis/:id', (req, res) => {
 app.post('/apis', (req, res) => {
     const newApi = req.body;
 
-    // Assign a new ID (safe auto-increment)
     newApi.id = apis.length > 0 ? Math.max(...apis.map(a => a.id)) + 1 : 1;
 
-    // Guarantee requestParams is always an array
-    newApi.requestParams = Array.isArray(newApi.requestParams)
-        ? newApi.requestParams
-        : [];
+    // Store requestParams EXACTLY as provided
+    newApi.requestParams = req.body.requestParams;
 
-    // AUTO TIMESTAMP
     newApi.lastUpdated = getTimestamp();
 
     apis.push(newApi);
-
     saveApis();
 
     res.json({ message: "API added successfully", api: newApi });
 });
+
 
 /**
  * DELETE /apis/:id
