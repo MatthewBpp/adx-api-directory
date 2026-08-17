@@ -3,18 +3,22 @@ import React from 'react';
 function NavBar({ adminMode, setAdminMode }) {
   return (
     <nav style={{
-      padding: '12px',
-      backgroundColor: '#F8FAFC',
+      padding: '20px',
+      backgroundColor: '#1A1F2B',
+      color: 'white',
       borderBottom: '1px solid #CBD5E1',
-      marginBottom: '20px'
+      display: 'flex',
+      alignItems: 'center',
+      gap: '20px'
     }}>
+      
       {/* Navigation links */}
       <a 
         href="/" 
         style={{ 
-          marginRight: '20px', 
           fontWeight: 'bold',
-          color: '#2563EB'
+          color: 'white',
+          textDecoration: 'none'
         }}
       >
         Home
@@ -23,9 +27,9 @@ function NavBar({ adminMode, setAdminMode }) {
       <a 
         href="/add" 
         style={{ 
-          marginRight: '20px', 
           fontWeight: 'bold',
-          color: '#2563EB'
+          color: 'white',
+          textDecoration: 'none'
         }}
       >
         Add API
@@ -41,7 +45,8 @@ function NavBar({ adminMode, setAdminMode }) {
           borderRadius: '4px',
           border: 'none',
           cursor: 'pointer',
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          marginLeft: 'auto'
         }}
       >
         {adminMode ? "Admin Mode: ON" : "Admin Mode: OFF"}

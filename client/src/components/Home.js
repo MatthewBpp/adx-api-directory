@@ -32,18 +32,25 @@ function Home({ adminMode }) {
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</a>
           <a href="/" style={{ color: 'white', textDecoration: 'none' }}>APIs</a>
-          <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Settings</a>
           <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Help</a>
           <a href="/" style={{ color: 'white', textDecoration: 'none' }}>Sign Out</a>
         </nav>
       </aside>
 
       {/* MAIN CONTENT */}
-      <main style={{ flex: 1, padding: '30px', color: '#1A1F2B' }}>
+        <main style={{ flex: 1, padding: '30px', color: '#1A1F2B' }}>
 
-        {/* HEADER */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h1>ADX — API Directory</h1>
+       {/* HEADER */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#1A1F2B',
+          color: 'white',
+          padding: '20px',
+          borderBottom: '1px solid #CBD5E1'
+        }}>
+          <h1 style={{ margin: 0 }}>ADX — API Directory</h1>
 
           {adminMode && (
             <a 
@@ -61,6 +68,8 @@ function Home({ adminMode }) {
             </a>
           )}
         </div>
+
+
 
         {/* SEARCH BAR */}
         <input
