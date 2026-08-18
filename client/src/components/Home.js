@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 function Home({ adminMode }) {
 
+  // Stores all APIs returned from the backend
   const [apis, setApis] = useState([]);
+
+  // Stores the user's search input for filtering APIs
   const [search, setSearch] = useState("");
 
+  // Fetch APIs whenever the search term changes
   useEffect(() => {
     const params = new URLSearchParams();
     if (search) params.append("search", search);
@@ -14,13 +18,29 @@ function Home({ adminMode }) {
       .then(data => setApis(data));
   }, [search]);
 
-  // Featured APIs = first 3
+  // Select the first 3 APIs to display as "featured"
   const featured = apis.slice(0, 3);
+
+  // Shared interactive styles (hover + focus) for WCAG compliance
+  const interactiveStyles = {
+    cursor: 'pointer',
+    textDecoration: 'none',
+    fontWeight: 'bold'
+  };
+
+  const linkHover = {
+    textDecoration: 'underline'
+  };
+
+  const focusOutline = {
+    outline: '2px solid #2563EB',
+    outlineOffset: '2px'
+  };
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F8FAFC' }}>
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR — persistent navigation area */}
       <aside style={{
         width: '220px',
         backgroundColor: '#1A1F2B',
@@ -29,6 +49,7 @@ function Home({ adminMode }) {
       }}>
         <h2 style={{ marginBottom: '30px' }}>ADX</h2>
 
+        {/* Main navigation links */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <a href="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>Home</a>
           <a href="/apis" style={{ color: 'white', textDecoration: 'none' }}>APIs</a>
@@ -38,10 +59,10 @@ function Home({ adminMode }) {
         </nav>
       </aside>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN CONTENT AREA */}
       <main style={{ flex: 1, padding: '30px', color: '#1A1F2B' }}>
 
-        {/* HEADER */}
+        {/* HEADER — includes title + Add API button (admin only) */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -70,7 +91,7 @@ function Home({ adminMode }) {
           )}
         </div>
 
-        {/* SEARCH BAR */}
+        {/* SEARCH BAR — filters APIs in real time */}
         <input
           type="text"
           placeholder="Search APIs..."
@@ -85,7 +106,7 @@ function Home({ adminMode }) {
           }}
         />
 
-        {/* FEATURED APIs */}
+        {/* FEATURED APIs — highlights first 3 APIs */}
         <h2 style={{ marginTop: '40px' }}>Featured APIs</h2>
 
         <div style={{
@@ -106,7 +127,11 @@ function Home({ adminMode }) {
 
               <a 
                 href={`/api/${api.id}`}
-                style={{ color: '#2563EB', fontWeight: 'bold', textDecoration: 'none' }}
+                style={{ ...interactiveStyles, color: '#2563EB' }}
+                onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+                onFocus={(e) => Object.assign(e.target.style, focusOutline)}
+                onBlur={(e) => e.target.style.outline = 'none'}
               >
                 Details
               </a>
@@ -114,7 +139,7 @@ function Home({ adminMode }) {
           ))}
         </div>
 
-        {/* ALL APIs TABLE */}
+        {/* ALL APIs TABLE — main directory listing */}
         <h2 style={{ marginTop: '40px' }}>All APIs</h2>
 
         <table style={{
@@ -136,39 +161,54 @@ function Home({ adminMode }) {
               <tr key={api.id} style={{ borderBottom: '1px solid #CBD5E1' }}>
                 <td style={{ padding: '12px' }}>{api.name}</td>
                 <td style={{ padding: '12px' }}>{api.description || "No description"}</td>
+
+                {/* WCAG‑compliant status colours */}
                 <td style={{ padding: '12px' }}>
                   <span style={{
-                    color: api.status === "Up-to-date" ? "#22C55E" : "#F59E0B",
+                    color: api.status === "Up-to-date" ? "#15803D" : "#B45309",
                     fontWeight: 'bold'
                   }}>
                     {api.status}
                   </span>
                 </td>
 
-                {/* UPDATED ACTIONS COLUMN */}
+                {/* ACTIONS — Details, Edit, Delete (admin only) */}
                 <td style={{ padding: '12px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+
+                  {/* Details link */}
                   <a 
                     href={`/api/${api.id}`}
-                    style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 'bold' }}
+                    style={{ ...interactiveStyles, color: '#2563EB' }}
+                    onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                    onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+                    onFocus={(e) => Object.assign(e.target.style, focusOutline)}
+                    onBlur={(e) => e.target.style.outline = 'none'}
                   >
                     Details
                   </a>
 
                   {adminMode && (
                     <>
+                      {/* Edit link */}
                       <a 
                         href={`/api/${api.id}/edit`}
-                        style={{ color: '#2563EB', textDecoration: 'none', fontWeight: 'bold' }}
+                        style={{ ...interactiveStyles, color: '#2563EB' }}
+                        onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                        onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+                        onFocus={(e) => Object.assign(e.target.style, focusOutline)}
+                        onBlur={(e) => e.target.style.outline = 'none'}
                       >
                         Edit
                       </a>
 
+                      {/* Delete button — admin only */}
                       <button
+                        aria-label="Delete API"
                         onClick={() => {
                           if (window.confirm("Are you sure you want to delete this API?")) {
                             fetch(`/apis/${api.id}`, { method: "DELETE" })
                               .then(() => {
-                                // Remove deleted API from list
+                                // Remove deleted API from list without reload
                                 setApis(prev => prev.filter(a => a.id !== api.id));
                               });
                           }
@@ -182,6 +222,10 @@ function Home({ adminMode }) {
                           cursor: 'pointer',
                           fontWeight: 'bold'
                         }}
+                        onMouseEnter={(e) => e.target.style.opacity = '0.85'}
+                        onMouseLeave={(e) => e.target.style.opacity = '1'}
+                        onFocus={(e) => Object.assign(e.target.style, focusOutline)}
+                        onBlur={(e) => e.target.style.outline = 'none'}
                       >
                         Delete
                       </button>
