@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { buildApiUrl } from '../config/apiConfig';
 
 function ApiDetails({ adminMode }) {
 
@@ -8,7 +9,7 @@ function ApiDetails({ adminMode }) {
   const [api, setApi] = useState(null);
 
   useEffect(() => {
-    fetch(`/apis/${id}`)
+    fetch(buildApiUrl(`/apis/${id}`))
       .then(res => res.json())
       .then(data => {
 
@@ -185,7 +186,7 @@ function ApiDetails({ adminMode }) {
           <button
             onClick={() => {
               if (window.confirm("Are you sure you want to delete this API?")) {
-                fetch(`/apis/${api.id}`, { method: "DELETE" })
+                fetch(buildApiUrl(`/apis/${api.id}`), { method: "DELETE" })
                   .then(() => navigate("/"));
               }
             }}

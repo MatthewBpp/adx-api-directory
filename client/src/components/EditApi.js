@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { buildApiUrl } from '../config/apiConfig';
 
 function EditApi({ adminMode }) {
 
@@ -9,7 +10,7 @@ function EditApi({ adminMode }) {
   const [api, setApi] = useState(null);
 
   useEffect(() => {
-  fetch(`/apis/${id}`)
+  fetch(buildApiUrl(`/apis/${id}`))
     .then(res => res.json())
     .then(data => {
 
@@ -61,7 +62,7 @@ function EditApi({ adminMode }) {
       examplePayload: parsedExample
     };
 
-    fetch(`/apis/${id}`, {
+    fetch(buildApiUrl(`/apis/${id}`), {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)

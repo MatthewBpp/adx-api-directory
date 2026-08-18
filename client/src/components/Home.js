@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { buildApiUrl } from '../config/apiConfig';
 
 function Home({ adminMode }) {
 
@@ -22,7 +23,7 @@ function Home({ adminMode }) {
     setLoading(true);
     setError(false);
 
-    fetch(`/apis?${params.toString()}`)
+    fetch(buildApiUrl(`/apis?${params.toString()}`))
       .then(res => res.json())
       .then(data => {
         if (!isMounted) return;
@@ -60,10 +61,6 @@ function Home({ adminMode }) {
     cursor: 'pointer',
     textDecoration: 'none',
     fontWeight: 'bold'
-  };
-
-  const linkHover = {
-    textDecoration: 'underline'
   };
 
   const focusOutline = {
@@ -246,7 +243,7 @@ function Home({ adminMode }) {
                             aria-label="Delete API"
                             onClick={() => {
                               if (window.confirm("Are you sure you want to delete this API?")) {
-                                fetch(`/apis/${api.id}`, { method: "DELETE" })
+                                fetch(buildApiUrl(`/apis/${api.id}`), { method: "DELETE" })
                                   .then(() => {
                                     // Remove deleted API from list without reload
                                     setApis(prev => prev.filter(a => a.id !== api.id));

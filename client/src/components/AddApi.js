@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { buildApiUrl } from '../config/apiConfig';
 
 function AddApi({ adminMode }) {
 
@@ -35,7 +36,7 @@ function AddApi({ adminMode }) {
     requestParams: parsedParams
   };
 
-  fetch(`/apis`, {
+  fetch(buildApiUrl('/apis'), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
