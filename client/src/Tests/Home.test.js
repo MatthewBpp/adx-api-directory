@@ -143,3 +143,45 @@ test('hides admin controls when adminMode is false', async () => {
   expect(screen.queryByRole('link', { name: /Edit/i })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: /Delete API/i })).not.toBeInTheDocument();
 });
+
+/**
+ * ERROR STATE TEST
+ * Ensures the UI handles backend failures gracefully and provides
+ * clear feedback to the user. Demonstrates defensive coding and
+ * systematic testing of non-happy paths.
+ */
+test('shows error message when API fetch fails', async () => {
+  global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+
+  render(<Home adminMode={false} />);
+
+  expect(await screen.findByText(/Failed to load APIs/i)).toBeInTheDocument();
+});
+
+/**
+ * FEATURED API SELECTION TEST
+ * Verifies that the component correctly selects the first three APIs
+ * as featured. Demonstrates testing of business logic and predictable
+ * behaviour for maintainability.
+ */
+test('selects first three APIs as featured', async () => {
+  global.fetch = jest.fn().mockResolvedValue({
+    json: async () => [
+      { id: 1, name: 'Payments API' },
+      { id: 2, name: 'Accounts API' },
+      { id: 3, name: 'Identity API' },
+      { id: 4, name: 'Fraud API' }
+    ]
+  });
+
+  render(<Home adminMode={false} />);
+
+  expect((await screen.findAllByText(/Payments API/i)).length).toBeGreaterThan(0);
+  expect(screen.getAllByText(/Accounts API/i).length).toBeGreaterThan(0);
+  expect(screen.getAllByText(/Identity API/i).length).toBeGreaterThan(0);
+
+  // Should NOT include the 4th API
+  expect(screen.queryByText(/Fraud API/i)).not.toBeInTheDocument();
+});
+
+

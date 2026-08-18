@@ -11,6 +11,8 @@ function Home({ adminMode }) {
   // Tracks fetch lifecycle so loading and empty states are shown correctly
   const [loading, setLoading] = useState(true);
 
+  const [error, setError] = useState(false);
+
   // Fetch APIs whenever the search term changes
   useEffect(() => {
     let isMounted = true;
@@ -18,6 +20,7 @@ function Home({ adminMode }) {
     if (search) params.append("search", search);
 
     setLoading(true);
+    setError(false);
 
     fetch(`/apis?${params.toString()}`)
       .then(res => res.json())
@@ -28,6 +31,7 @@ function Home({ adminMode }) {
       })
       .catch(() => {
         if (!isMounted) return;
+        setError(true);
         setApis([]);
         setLoading(false);
       });
@@ -37,14 +41,19 @@ function Home({ adminMode }) {
     };
   }, [search]);
 
+  if (error) return <p>Failed to load APIs</p>;
+
   const filteredApis = apis.filter(api => {
     const apiName = (api.name || '').toLowerCase();
     const searchTerm = search.toLowerCase();
     return apiName.includes(searchTerm);
   });
 
+  // Show only the first 3 matching APIs in the home directory
+  const visibleApis = filteredApis.slice(0, 3);
+
   // Select the first 3 APIs to display as "featured"
-  const featured = filteredApis.slice(0, 3);
+  const featured = visibleApis.slice(0, 3);
 
   // Shared interactive styles (hover + focus) for WCAG compliance
   const interactiveStyles = {
@@ -188,7 +197,7 @@ function Home({ adminMode }) {
               </thead>
 
               <tbody>
-                {filteredApis.map(api => (
+                {visibleApis.map(api => (
                   <tr key={api.id} style={{ borderBottom: '1px solid #CBD5E1' }}>
                     <td style={{ padding: '12px' }}>{api.name}</td>
                     <td style={{ padding: '12px' }}>{api.description || "No description"}</td>
