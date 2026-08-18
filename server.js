@@ -9,7 +9,35 @@ const cors = require('cors');
 const app = express();
 const fs = require('fs');
 
-app.use(cors());
+// Configure CORS for production and development
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, curl requests)
+        if (!origin) return callback(null, true);
+        
+        // Allow localhost for development
+        if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+            return callback(null, true);
+        }
+        
+        // Allow Vercel frontend deployments
+        if (origin.includes('vercel.app')) {
+            return callback(null, true);
+        }
+        
+        // Allow any onrender.com subdomain for frontend (if deployed there)
+        if (origin.includes('onrender.com')) {
+            return callback(null, true);
+        }
+        
+        callback(null, true); // For now, allow all for testing
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Load API directory data from JSON file (in-memory store)
